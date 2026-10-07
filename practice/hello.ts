@@ -153,3 +153,132 @@ const cart :   Cartitem[] = [
 ]    
 const totalcost = cart.reduce((sum ,item) => sum +item.price * item.quantity, 100);
 console.log(totalcost);            
+
+                                    // --Day 3--
+
+                                    // Generics and Utility Types
+
+                                    // Generic functions
+
+const firstItem = <T>(items: T[]): T | undefined => items [0];
+
+console.log(firstItem([10,20,30]));
+console.log(firstItem(["a","b","c"]));
+
+                                    // Another Example
+
+const lastItem = <T> (items : T[]) : T | undefined => items[items.length-1];
+console.log(lastItem([10,20,40]));
+console.log(lastItem(["Ali","Saif","Talha"]));
+console.log(lastItem([]));
+
+                                    // Another Example
+const toArray = <T> (value : T[]) : T[] => value;
+console.log(toArray([12,13]));
+console.log(toArray(["HY","Talha"]));                                    
+console.log(toArray([true,false]));
+                                    // Array<T>
+
+const nums1 : number[] = [1,2,3,4];
+const nums2 : Array<number> = [5,6,7,8];
+console.log(nums1,nums2);
+
+const word1 : string[] = ["Talha"];
+const word2 : Array<string>  = ["hy","bye"];
+console.log(word1,word2);
+
+                                    // Partial
+
+interface profile{
+    age : number;
+    name : string;
+    email : string;
+    city : string;
+}
+const update : Partial<profile> = {city : "Lahore"};
+console.log(update);
+
+                                    // Pick
+
+interface profile1  {
+      name: string;
+      age: number;
+      city: string;
+}
+type profilecard = Pick<profile1,"name"|"city">;
+const card : profilecard ={name:"Talha",city:"Gujranwala"};
+console.log(card);
+
+                                    // Another Example
+
+interface Productss {
+    name : string;
+    price : number;
+    expiry : number;
+    stock : number;
+}   
+type producttype = Pick<Productss,"price"|"expiry">;
+const finalproduct:producttype = {price:100,expiry:2027}  ;
+console.log(finalproduct); 
+
+                                    // Omit
+
+interface profile1  {
+      name: string;
+      age: number;
+      city: string;
+}          
+type profilenoage = Omit<profile1,"age">;
+const noage : profilenoage = {name : "Talha",city : "Gujranwala"};
+console.log(noage);
+
+                                    // Record
+
+const scoreByname : Record<string,number>= {
+      "Ali" : 70,
+      "Sara" : 30,
+};
+scoreByname["Talha"]=70;
+console.log(scoreByname);
+
+type Role = "admin" | "users";
+const permission : Record<Role,string> = {
+     "admin" : "everything",
+     "users" : "readonly",
+};
+console.log(permission);
+
+                                    // Enums vs Union literals
+
+enum colour {
+    RED = "red",
+    GREEN = "green",
+};
+const paint : colour = colour.RED;
+console.log(paint);
+
+type  Light = "red" | "green";
+const signal : Light = "green";
+console.log(signal);
+
+                                    // (Stretch): Type guards and narrowing
+
+const describeValue = (value : string|number) => {
+    if (typeof value == "string"){
+        return value.toUpperCase();
+        };
+         return value.toFixed(2);
+};     
+console.log(describeValue("hello talha"));
+console.log(describeValue(6.7788));
+                                    // Custom Type Guard
+
+interface Cat {
+    meow : () => "Meow!"
+}     
+const myCat = (value : unknown) : value is Cat =>
+    typeof  value === "object" && value !== null && "meow" in value; 
+const maybecat : unknown = { meow : () => "Meow!"};
+if (myCat(maybecat)){
+console.log(maybecat.meow());                          
+};
