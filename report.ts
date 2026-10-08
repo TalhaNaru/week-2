@@ -1,6 +1,14 @@
-                                     // // Week-1 Exercise
+import type { Summary } from "./transform";
+import type { UserReport } from "./types";
 
-const columns = [
+interface Column {
+  label: string;
+  width: number;
+  right?: boolean;
+  get: (report: UserReport) => string | number;
+}
+
+const columns: Column[] = [
   { label: "Name", width: 24, get: (r) => r.name },
   { label: "Email", width: 30, get: (r) => r.email },
   { label: "City", width: 16, get: (r) => r.city },
@@ -9,15 +17,15 @@ const columns = [
   { label: "Open", width: 6, right: true, get: (r) => r.openTodos },
 ];
 
-const pad = (value, { width, right }) =>
+const pad = (value: string | number, { width, right }: Column): string =>
   right ? String(value).padStart(width) : String(value).padEnd(width);
 
-const formatRow = (getValue) =>
+const formatRow = (getValue: (col: Column) => string | number): string =>
   columns.map((col) => pad(getValue(col), col)).join(" ");
 
-export const printReport = (records, summary) => {
+export const printReport = (reports: UserReport[], summary: Summary): void => {
   const header = formatRow((col) => col.label);
-  const rows = records.map((record) => formatRow((col) => col.get(record)));
+  const rows = reports.map((report) => formatRow((col) => col.get(report)));
 
   console.log("\nUser Insights Report\n");
   console.log([header, "-".repeat(header.length), ...rows].join("\n"));
